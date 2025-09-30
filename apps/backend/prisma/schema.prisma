@@ -1,5 +1,4 @@
-// Prisma schema para EcoFin
-
+// Prisma schema
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -9,7 +8,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
-/// Usuários do sistema
+/// Usuários
 model User {
   id        String   @id @default(cuid())
   name      String
@@ -27,30 +26,32 @@ model User {
   passwordResets        PasswordReset[]
 }
 
-/// Roles de usuários
+/// Roles
 enum UserRole {
   USER
   PREMIUM
   ADMIN
 }
 
-/// Transação original (contrato)
+/// Transação
 model Transaction {
-  id          String            @id @default(cuid())
-  userId      String
-  user        User              @relation(fields: [userId], references: [id])
-  title       String
-  amountTotal Float
-  status      TransactionStatus
-  dueDate     DateTime?
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+  id            String            @id @default(cuid())
+  userId        String
+  user          User              @relation(fields: [userId], references: [id])
+  title         String
+  amountTotal   Float
+  paidAmount    Float
+  pendingAmount Float
+  status        TransactionStatus
+  dueDate       DateTime?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
 
   // Movimentos vinculados (pagamentos parciais)
   movements TransactionMovement[]
 }
 
-/// Movimentos de transações (entradas e saídas)
+/// Movimentos de transações
 model TransactionMovement {
   id                     String                @id @default(cuid())
   transactionId          String
@@ -95,7 +96,6 @@ model RecurringTransaction {
   createdAt DateTime            @default(now())
   updatedAt DateTime            @updatedAt
 
-  // Movimentos gerados automaticamente
   movements TransactionMovement[]
 }
 
