@@ -1,0 +1,119 @@
+// Prisma schema para EcoFin
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+/// Usuários do sistema
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  phone     String? // opcional
+  avatar    String? // URL do avatar
+  role      UserRole @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamentos
+  transactions          Transaction[]
+  recurringTransactions RecurringTransaction[]
+  passwordResets        PasswordReset[]
+}
+
+/// Roles de usuários
+enum UserRole {
+  USER
+  PREMIUM
+  ADMIN
+}
+
+/// Transação original (contrato)
+model Transaction {
+  id          String            @id @default(cuid())
+  userId      String
+  user        User              @relation(fields: [userId], references: [id])
+  title       String
+  amountTotal Float
+  status      TransactionStatus
+  dueDate     DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  // Movimentos vinculados (pagamentos parciais)
+  movements TransactionMovement[]
+}
+
+/// Movimentos de transações (entradas e saídas)
+model TransactionMovement {
+  id                     String                @id @default(cuid())
+  transactionId          String
+  transaction            Transaction           @relation(fields: [transactionId], references: [id])
+  amount                 Float
+  type                   MovementType
+  date                   DateTime
+  note                   String? // observações
+  interest               Float?                @default(0)
+  fine                   Float?                @default(0)
+  discount               Float?                @default(0)
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @updatedAt
+  RecurringTransaction   RecurringTransaction? @relation(fields: [recurringTransactionId], references: [id])
+  recurringTransactionId String?
+}
+
+/// Status de transações
+enum TransactionStatus {
+  PENDING
+  PARTIALLY_PAID
+  PAID
+  OVERDUE
+}
+
+/// Tipo de movimento (entrada ou saída)
+enum MovementType {
+  INCOME
+  EXPENSE
+}
+
+/// Transações recorrentes
+model RecurringTransaction {
+  id        String              @id @default(cuid())
+  userId    String
+  user      User                @relation(fields: [userId], references: [id])
+  title     String
+  amount    Float
+  frequency RecurrenceFrequency
+  startDate DateTime
+  endDate   DateTime?
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+
+  // Movimentos gerados automaticamente
+  movements TransactionMovement[]
+}
+
+/// Frequência de transações recorrentes
+enum RecurrenceFrequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+/// Reset de senha
+model PasswordReset {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
