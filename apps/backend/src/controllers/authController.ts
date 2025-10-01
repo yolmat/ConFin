@@ -37,29 +37,6 @@ export const signup = async (req: Request, res: Response) => {
   }
 };
 
-export const login = async (req: Request, res: Response) => {
-  try {
-    const { email, password } = req.body;
-
-    const user = await prisma.user.findUnique({ where: { email } });
-    if (!user)
-      return res.status(400).json({ message: "Usuário não encontrado" });
-
-    //const isValid = await bcrypt.compare(password, user.password);
-    //if (!isValid) return res.status(400).json({ message: "Senha incorreta" });
-    if (password !== user.password)
-      return res.status(400).json({ message: "Senha incorreta" });
-
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
-      expiresIn: "1h",
-    });
-
-    res.json({ user, token });
-  } catch (error) {
-    res.status(500).json({ error });
-  }
-};
-
 export const allUsers = async (req: Request, res: Response) => {
   try {
     const users = await prisma.user.findMany();
