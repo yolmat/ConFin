@@ -1,4 +1,3 @@
-// src/controllers/authController.ts
 /*
   Controller de autenticação
  */
@@ -46,8 +45,10 @@ export const login = async (req: Request, res: Response) => {
     if (!user)
       return res.status(400).json({ message: "Usuário não encontrado" });
 
-    const isValid = await bcrypt.compare(password, user.password);
-    if (!isValid) return res.status(400).json({ message: "Senha incorreta" });
+    //const isValid = await bcrypt.compare(password, user.password);
+    //if (!isValid) return res.status(400).json({ message: "Senha incorreta" });
+    if (password !== user.password)
+      return res.status(400).json({ message: "Senha incorreta" });
 
     const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
       expiresIn: "1h",
@@ -56,5 +57,14 @@ export const login = async (req: Request, res: Response) => {
     res.json({ user, token });
   } catch (error) {
     res.status(500).json({ error });
+  }
+};
+
+export const allUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await prisma.user.findMany();
+    res.json(users);
+  } catch (e) {
+    res.status(500).json({ e });
   }
 };

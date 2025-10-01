@@ -75,3 +75,12 @@ export const partialPayment = async (req: Request, res: Response) => {
     res.status(500).json({ error });
   }
 };
+
+export const allTranisitonsGlobal = async (req: Request, res: Response) => {
+  try {
+    const transitions = await prisma.transaction.findMany();
+    res.json(transitions);
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};

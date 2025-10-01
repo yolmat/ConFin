@@ -1,4 +1,3 @@
-// src/routes/transactions.ts
 import { Router } from "express";
 import {
   getTransactions,
