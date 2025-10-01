@@ -10,7 +10,8 @@ import {
   partialPayment,
 } from "./controllers/transactionController";
 
-import { login, allUsers } from "./controllers/authController";
+import { allUsers } from "./controllers/authController";
+import { login } from "./services/auth.service";
 
 const app = express();
 app.use(json());
@@ -19,7 +20,15 @@ app.use(json());
 app.get("/transactions", getTransactions);
 app.post("/transactions", createTransaction);
 app.post("/transactions/partial", partialPayment);
-app.post("/login", login);
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const result = await login(email, password);
+    res.json(result);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
 app.get("/users", allUsers);
 app.get("/allTranisitonsGlobal", allTranisitonsGlobal);
 
