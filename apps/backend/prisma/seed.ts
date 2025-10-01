@@ -10,6 +10,7 @@ import {
   UserRole,
 } from "@prisma/client";
 import { randomUUID } from "crypto";
+import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
@@ -18,6 +19,7 @@ async function main() {
 
   // Tipos de usuários
   const userRoles = [UserRole.USER, UserRole.PREMIUM, UserRole.ADMIN] as const;
+  const passwordHash = await bcrypt.hash("123456", 10);
 
   // Função para gerar usuários fake
   function generateUser(index: number, role: (typeof userRoles)[number]) {
@@ -25,7 +27,7 @@ async function main() {
       id: randomUUID(),
       name: `User_${role}_${index}`,
       email: `user_${role}_${index}@ecofin.test`,
-      password: "password123",
+      password: passwordHash,
       role,
       avatar: `https://i.pravatar.cc/150?img=${index}`,
       createdAt: new Date(),
