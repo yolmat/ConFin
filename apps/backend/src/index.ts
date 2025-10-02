@@ -3,34 +3,15 @@
  */
 import express from "express";
 import { json } from "body-parser";
-import {
-  allTranisitonsGlobal,
-  createTransaction,
-  getTransactions,
-  partialPayment,
-} from "./controllers/transactionController";
-
-import { allUsers } from "./controllers/authController";
-import { login } from "./services/auth.service";
+import cors from "cors";
+import routes from "./routes/index.routes";
 
 const app = express();
+
+app.use(cors());
 app.use(json());
 
-// Rotas de teste
-app.get("/transactions", getTransactions);
-app.post("/transactions", createTransaction);
-app.post("/transactions/partial", partialPayment);
-app.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const result = await login(email, password);
-    res.json(result);
-  } catch (err: any) {
-    res.status(400).json({ error: err.message });
-  }
-});
-app.get("/users", allUsers);
-app.get("/allTranisitonsGlobal", allTranisitonsGlobal);
+routes(app);
 
 // Iniciar servidor
 const PORT = 3000;

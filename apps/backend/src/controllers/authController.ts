@@ -6,7 +6,7 @@ import { prisma } from "../db/client";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET || "supersecret";
+const JWT_SECRET = process.env.JWT_SECRET || "super-secret-key";
 
 export const signup = async (req: Request, res: Response) => {
   try {
@@ -14,7 +14,7 @@ export const signup = async (req: Request, res: Response) => {
 
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser)
-      return res.status(400).json({ message: "Email já cadastrado" });
+      return res.status(400).json({ message: "Usuario já cadastrado" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
 

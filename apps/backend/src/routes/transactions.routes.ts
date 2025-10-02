@@ -1,15 +1,15 @@
-import { Router } from "express";
+import { Application } from "express";
 import {
   getTransactions,
   createTransaction,
 } from "../controllers/transactionController";
 
-const router = Router();
+const transactionsRoutes = (app: Application) => {
+  // Listar transações com paginação
+  app.get("/", getTransactions);
 
-// Listar transações com paginação
-router.get("/", getTransactions);
+  // Criar nova transação
+  app.post("/", createTransaction);
+};
 
-// Criar nova transação
-router.post("/", createTransaction);
-
-export default router;
+export default transactionsRoutes;
