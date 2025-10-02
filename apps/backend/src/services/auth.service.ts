@@ -1,11 +1,10 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { prisma } from "../db/client";
-import { loginSchema } from "../schemas/auth";
 
 const JWT_SECRET = process.env.JWT_SECRET || "super-secret-key";
 
-export async function login(email: string, password: string) {
+export async function loginService(email: string, password: string) {
   const user = await prisma.user.findUnique({ where: { email } });
 
   if (!user) throw new Error("Usuário não encontrado");
