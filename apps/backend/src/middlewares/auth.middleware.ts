@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { config } from "../configs";
 
-const JWT_SECRET = process.env.JWT_SECRET || "super-secret-key";
+const JWT_SECRET = config.jwtSecret || "super-secret-key";
 
 export function authMiddleware(
   req: Request,

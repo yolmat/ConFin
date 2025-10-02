@@ -4,7 +4,6 @@
 import { Request, Response } from "express";
 import { prisma } from "../db/client";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import { loginSchema, singupSchema } from "../schemas/auth";
 import { loginService } from "../services/auth.service";
 import {
@@ -12,8 +11,6 @@ import {
   generateRefreshToken,
   verifyRefreshToken,
 } from "../../utils/jwt";
-
-const JWT_SECRET = process.env.JWT_SECRET || "super-secret-key";
 
 export const signup = async (req: Request, res: Response) => {
   const result = singupSchema.safeParse(req.body);

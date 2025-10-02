@@ -1,8 +1,6 @@
 import bcrypt from "bcrypt";
 import { prisma } from "../db/client";
 
-const JWT_SECRET = process.env.JWT_SECRET || "super-secret-key";
-
 export async function loginService(email: string, password: string) {
   const user = await prisma.user.findUnique({ where: { email } });
 
