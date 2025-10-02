@@ -24,6 +24,7 @@ model User {
   transactions          Transaction[]
   recurringTransactions RecurringTransaction[]
   passwordResets        PasswordReset[]
+  RefreshToken          RefreshToken[]
 }
 
 /// Roles
@@ -115,5 +116,14 @@ model PasswordReset {
   token     String   @unique
   expiresAt DateTime
   used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  expiresAt DateTime
   createdAt DateTime @default(now())
 }

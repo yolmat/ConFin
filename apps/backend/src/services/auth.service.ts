@@ -1,4 +1,3 @@
-import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { prisma } from "../db/client";
 
@@ -13,13 +12,5 @@ export async function loginService(email: string, password: string) {
 
   if (!isValid) throw new Error("Senha inválida");
 
-  const token = jwt.sign(
-    { userId: user.id, email: user.email, role: user.role },
-    JWT_SECRET,
-    {
-      expiresIn: "1d",
-    }
-  );
-
-  return { token, user };
+  return { user };
 }
