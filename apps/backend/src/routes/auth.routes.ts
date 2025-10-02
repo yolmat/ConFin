@@ -3,11 +3,17 @@ import { Application } from "express";
 import { login } from "../services/auth.service";
 import { authMiddleware } from "../middlewares/auth.middleware";
 import { allUsers, signup } from "../controllers/authController";
+import { loginSchema } from "../schemas/auth";
 
 const authRoutes = (app: Application) => {
   // Login usuario
   app.post("/auth/login", async (req, res) => {
-    const { email, password } = req.body;
+    const result = loginSchema.safeParse(req.body);
+
+    if (!result.success)
+      return res.status(400).json({ error: result.error.format() });
+
+    const { email, password } = result.data;
 
     try {
       const result = await login(email, password);

@@ -5,13 +5,19 @@ import { Request, Response } from "express";
 import { prisma } from "../db/client";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { singupSchema } from "../schemas/auth";
 
 const JWT_SECRET = process.env.JWT_SECRET || "super-secret-key";
 
 export const signup = async (req: Request, res: Response) => {
-  try {
-    const { name, email, password, role } = req.body;
+  const result = singupSchema.safeParse(req.body);
 
+  if (!result.success)
+    return res.status(400).json({ error: result.error.format() });
+
+  const { name, email, password } = result.data;
+
+  try {
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser)
       return res.status(400).json({ message: "Usuario já cadastrado" });
@@ -23,7 +29,7 @@ export const signup = async (req: Request, res: Response) => {
         name,
         email,
         password: hashedPassword,
-        role: role || "USER",
+        role: "USER",
       },
     });
 

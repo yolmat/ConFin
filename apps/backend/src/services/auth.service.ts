@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { prisma } from "../db/client";
+import { loginSchema } from "../schemas/auth";
 
 const JWT_SECRET = process.env.JWT_SECRET || "super-secret-key";
 
