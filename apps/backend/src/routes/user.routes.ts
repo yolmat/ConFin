@@ -1,6 +1,6 @@
 import { Application } from "express";
 import { authMiddleware } from "../middlewares/auth.middleware";
-import { allUsers, getMe } from "../controllers/authController";
+import { allUsers, getMe } from "../controllers/auth.controller";
 
 const userRoutes = (app: Application) => {
   // Usuario logado

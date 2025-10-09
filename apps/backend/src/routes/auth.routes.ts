@@ -1,5 +1,5 @@
 import { Application } from "express";
-import { signup, login, refresh } from "../controllers/authController";
+import { signup, login, refresh } from "../controllers/auth.controller";
 import { loginLimiter } from "../configs";
 
 const authRoutes = (app: Application) => {
