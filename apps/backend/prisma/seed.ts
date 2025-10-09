@@ -4,8 +4,8 @@
  */
 
 import {
+  MovementType,
   PrismaClient,
-  RecurrenceFrequency,
   TransactionStatus,
   UserRole,
 } from "@prisma/client";
@@ -58,19 +58,27 @@ async function main() {
   // Função para gerar transações fake
   function generateTransaction(userId: string, index: number) {
     const totalAmount = Math.floor(Math.random() * 2000) + 50;
+
     const paidAmount = Math.floor(Math.random() * totalAmount);
+
     const pendingAmount = totalAmount - paidAmount;
     const status =
       pendingAmount <= 0 ? TransactionStatus.PAID : TransactionStatus.PENDING;
+
+    const typeRandom = Math.floor(Math.random() * 10) + 1;
+    const type = typeRandom <= 5 ? MovementType.EXPENSE : MovementType.INCOME;
 
     return {
       id: randomUUID(),
       userId,
       title: `Transação ${index}`,
+      type,
       amountTotal: totalAmount,
       paidAmount,
       pendingAmount,
       status,
+      date: new Date(),
+      note: `Transação ${index} obs`,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -80,38 +88,12 @@ async function main() {
   for (const user of allUsers) {
     for (let i = 1; i <= 10; i++) {
       const transaction = generateTransaction(user.id, i);
+      console.log(transaction);
       await prisma.transaction.create({ data: transaction });
     }
   }
 
   console.log("Transações criadas...");
-
-  // Função para gerar transações recorrentes
-  function generateRecurringTransaction(userId: string, index: number) {
-    const totalAmount = Math.floor(Math.random() * 3000) + 100;
-    const amount = Math.floor(Math.random() * 3000) + 100;
-    const status = "PENDING";
-
-    return {
-      id: String(randomUUID()),
-      userId,
-      title: `Recorrente ${index}`,
-      amount,
-      frequency: RecurrenceFrequency.MONTHLY,
-      startDate: new Date("2025-01-01"),
-      endDate: new Date("2030-01-01"),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-  }
-
-  // Criar 5 recorrentes para cada usuário
-  for (const user of allUsers) {
-    for (let i = 1; i <= 5; i++) {
-      const recurring = generateRecurringTransaction(user.id, i);
-      await prisma.recurringTransaction.create({ data: recurring });
-    }
-  }
 
   console.log("Transações recorrentes criadas...");
 
