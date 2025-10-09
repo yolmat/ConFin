@@ -8,25 +8,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-/// Usuários
-model User {
-  id        String   @id @default(cuid())
-  name      String
-  email     String   @unique
-  password  String
-  phone     String? // opcional
-  avatar    String? // URL do avatar
-  role      UserRole @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Relacionamentos
-  transactions          Transaction[]
-  recurringTransactions RecurringTransaction[]
-  passwordResets        PasswordReset[]
-  RefreshToken          RefreshToken[]
-}
-
 /// Roles
 enum UserRole {
   USER
@@ -34,48 +15,11 @@ enum UserRole {
   ADMIN
 }
 
-/// Transação
-model Transaction {
-  id            String            @id @default(cuid())
-  userId        String
-  user          User              @relation(fields: [userId], references: [id])
-  title         String
-  amountTotal   Float
-  paidAmount    Float
-  pendingAmount Float
-  status        TransactionStatus
-  dueDate       DateTime?
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
-
-  // Movimentos vinculados (pagamentos parciais)
-  movements TransactionMovement[]
-}
-
-/// Movimentos de transações
-model TransactionMovement {
-  id                     String                @id @default(cuid())
-  transactionId          String
-  transaction            Transaction           @relation(fields: [transactionId], references: [id])
-  amount                 Float
-  type                   MovementType
-  date                   DateTime
-  note                   String? // observações
-  interest               Float?                @default(0)
-  fine                   Float?                @default(0)
-  discount               Float?                @default(0)
-  createdAt              DateTime              @default(now())
-  updatedAt              DateTime              @updatedAt
-  RecurringTransaction   RecurringTransaction? @relation(fields: [recurringTransactionId], references: [id])
-  recurringTransactionId String?
-}
-
 /// Status de transações
 enum TransactionStatus {
   PENDING
   PARTIALLY_PAID
   PAID
-  OVERDUE
 }
 
 /// Tipo de movimento (entrada ou saída)
@@ -84,28 +28,39 @@ enum MovementType {
   EXPENSE
 }
 
-/// Transações recorrentes
-model RecurringTransaction {
-  id        String              @id @default(cuid())
-  userId    String
-  user      User                @relation(fields: [userId], references: [id])
-  title     String
-  amount    Float
-  frequency RecurrenceFrequency
-  startDate DateTime
-  endDate   DateTime?
-  createdAt DateTime            @default(now())
-  updatedAt DateTime            @updatedAt
+/// Usuários
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  phone     String?
+  avatar    String?
+  role      UserRole @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  movements TransactionMovement[]
+  // Relacionamentos
+  transactions   Transaction[]
+  passwordResets PasswordReset[]
+  RefreshToken   RefreshToken[]
 }
 
-/// Frequência de transações recorrentes
-enum RecurrenceFrequency {
-  DAILY
-  WEEKLY
-  MONTHLY
-  YEARLY
+/// Transação
+model Transaction {
+  id            String            @id @default(cuid())
+  userId        String
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title         String
+  type          MovementType
+  amountTotal   Float
+  paidAmount    Float             @default(0)
+  pendingAmount Float             @default(0)
+  status        TransactionStatus @default(PENDING)
+  date          DateTime
+  note          String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
 }
 
 /// Reset de senha
