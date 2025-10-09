@@ -11,6 +11,7 @@ import {
   generateRefreshToken,
   verifyRefreshToken,
 } from "../../utils/jwt";
+import { UserRole } from "@prisma/client";
 
 export const signup = async (req: Request, res: Response) => {
   const result = singupSchema.safeParse(req.body);
@@ -32,7 +33,7 @@ export const signup = async (req: Request, res: Response) => {
         name,
         email,
         password: hashedPassword,
-        role: "USER",
+        role: UserRole.USER,
       },
     });
 
