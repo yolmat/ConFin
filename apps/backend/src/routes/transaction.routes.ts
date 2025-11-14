@@ -1,6 +1,7 @@
 import { Application } from "express";
 import {
   allTranisitonsGlobal,
+  allTransactionUsers,
   createTransaction,
 } from "../controllers/transaction.controller";
 import { authMiddleware } from "../middlewares/auth.middleware";
@@ -14,6 +15,9 @@ const transactionsRoutes = (app: Application) => {
 
   // Tras todas as transações
   app.get("/transaction/all", allTranisitonsGlobal);
+
+  // Tras todas as transações com base no token do usuario
+  app.get("/transaction/AllTransactionsUsers", allTransactionUsers);
 };
 
 export default transactionsRoutes;

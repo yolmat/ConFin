@@ -38,3 +38,18 @@ export const allTranisitonsGlobal = async (req: Request, res: Response) => {
     res.status(500).json({ error });
   }
 };
+
+export const allTransactionUsers = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.userId;
+
+    const transactionsUser = await prisma.transaction.findMany({
+      where: { userId },
+    });
+
+    if (!userId) return res.json(404).json({ error: "Usuario não encontrado" });
+    return res.json(transactionsUser);
+  } catch (e) {
+    return res.status(500).json({ error: "Erro interno no servidor" });
+  }
+};
