@@ -11,7 +11,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import InfosDash from "./infosDash";
+import InfosDash from "./CardsDash";
 
 export default function Page() {
   return (

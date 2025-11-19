@@ -1,4 +1,5 @@
 import CardsInfos from "@/components/app-cards-infos";
+import ExtractDash from "./ExtractDash";
 
 export default function InfosDash() {
   return (
@@ -8,7 +9,7 @@ export default function InfosDash() {
         <CardsInfos titleHeader="Despesas" icon="expenditure" value={2000.0} />
         <CardsInfos titleHeader="Extrato" icon="extract" value={-1000.0} />
       </div>
-      <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
+      <ExtractDash />
     </div>
   );
 }

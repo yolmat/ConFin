@@ -44,6 +44,7 @@
   --color-cardinfos-revenue: var(--cardinfos-revenue);
   --color-cardinfos-expenditure: var(--cardinfos-expenditure);
   --color-cardinfos-extract: var(--cardinfos-extract);
+  --color-cardinfos-bg-revenue: var(--cardinfos-bg-revenue);
 }
 
 :root {
@@ -82,6 +83,7 @@
   --cardinfos-revenue: #00A63E;
   --cardinfos-expenditure: #E7000B;
   --cardinfos-extract: #525252;
+  --cardinfos-bg-revenue: #DBFCE7;
 }
 
 .dark {
