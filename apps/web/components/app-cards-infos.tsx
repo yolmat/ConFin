@@ -1,5 +1,4 @@
 import {
-  DollarSignIcon,
   TrendingDownIcon,
   TrendingUpIcon,
   WalletMinimalIcon,
