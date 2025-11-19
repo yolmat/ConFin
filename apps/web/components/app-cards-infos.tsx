@@ -25,7 +25,7 @@ export default function CardsInfos({ titleHeader, icon, value }: InfosCards) {
   });
 
   return (
-    <Card className="flex flex-col max-w-fit max-h-fit">
+    <Card className="flex flex-col w-full md:max-w-fit md:max-h-fit">
       <CardHeader className="flex items-center justify-between text-2xl">
         <CardTitle className="font-bold text-lg">{titleHeader}</CardTitle>
         {icon === "revenue" ? (
