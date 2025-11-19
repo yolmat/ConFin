@@ -14,6 +14,13 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
+import {
+  HouseIcon,
+  TrendingUpIcon,
+  TrendingDownIcon,
+  DollarSignIcon,
+} from "lucide-react";
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
@@ -34,16 +41,28 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild /*isActive={}*/>
-                  <a href="">Dashboard</a>
+                  <div>
+                    <HouseIcon />
+                    <a href="">Dashboard</a>
+                  </div>
                 </SidebarMenuButton>
                 <SidebarMenuButton asChild /*isActive={}*/>
-                  <a href="">Receitas</a>
+                  <div>
+                    <TrendingUpIcon />
+                    <a href="">Receitas</a>
+                  </div>
                 </SidebarMenuButton>
                 <SidebarMenuButton asChild /*isActive={}*/>
-                  <a href="">Despesas</a>
+                  <div>
+                    <TrendingDownIcon />
+                    <a href="">Despesas</a>
+                  </div>
                 </SidebarMenuButton>
                 <SidebarMenuButton asChild /*isActive={}*/>
-                  <a href="">Extrato</a>
+                  <div>
+                    <DollarSignIcon />
+                    <a href="">Extrato</a>
+                  </div>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
